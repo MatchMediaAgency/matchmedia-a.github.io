@@ -359,8 +359,11 @@ nav {
 .gal-grid {
   display: grid;
   grid-template-columns: 2fr 1.2fr;
-  grid-template-rows: auto auto auto;
+  grid-template-rows: repeat(3, auto);
   gap: 4px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 .gal-cell { position: relative; overflow: hidden; }
 .gal-cell img {
