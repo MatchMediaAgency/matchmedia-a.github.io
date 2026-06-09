@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Match Media — Framing the Match</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --cream:  #F5F1DC;
+  --blue:   #0046FF;
+  --orange: #FF8040;
+  --ink:    #1A150E;
+  --carbon: #2B2B2B;
+  --white:  #FAFAF5;
+  --faded:  #8A8070;
+  --rule:   rgba(26,21,14,0.09);
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: 'Barlow', sans-serif;
+  font-size: 16px; line-height: 1.65;
+  overflow-x: hidden;
+}
+
+/* ══ NAV ══ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+  height: 54px; background: var(--ink);
+  border-bottom: 3px solid var(--orange);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 40px;
+}
+.logo-container { display: flex; align-items: center; height: 38px; }
+.logo-placeholder {
+  font-family: 'Oswald', sans-serif;
+  font-weight: 700; font-size: 1rem;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--cream);
+  border: 1px dashed rgba(255,128,64,0.45);
+  padding: 5px 14px;
+  display: flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+  /* ↓ Reemplazar todo este bloque con <svg>...</svg> cuando el vector esté listo */
+}
+.logo-placeholder em { color: var(--orange); font-style: normal; font-size: 0.7rem; }
+.nav-links { display: flex; gap: 24px; list-style: none; align-items: center; }
+.nav-links a {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.8rem; font-weight: 600;
+  letter-spacing: 0.3em; text-transform: uppercase;
+  color: rgba(245,241,220,0.45); text-decoration: none;
+  transition: color .2s;
+}
+.nav-links a:hover { color: var(--orange); }
+.nav-cta {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--ink); background: var(--orange);
+  padding: 8px 18px; text-decoration: none;
+  transition: background .2s; white-space: nowrap;
+}
+.nav-cta:hover { background: var(--cream); }
+
+/* ══ HERO ══ */
+#hero {
+  min-height: 100vh; padding-top: 54px;
+  position: relative; overflow: hidden;
+  display: flex; align-items: stretch;
+}
+.hero-bg { position: absolute; inset: 0; z-index: 0; }
+.hero-bg img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; display: block; }
+.hero-bg::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(105deg, rgba(26,21,14,0.93) 0%, rgba(26,21,14,0.7) 55%, rgba(0,70,255,0.2) 100%);
+}
+.hero-inner {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 80px 48px 120px; max-width: 720px;
+}
+.hero-eyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 0.5em; text-transform: uppercase;
+  color: var(--orange);
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 36px;
+  opacity: 0; animation: fadeUp .6s .1s ease forwards;
+}
+.hero-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--orange); }
+.hero-logo-wrap {
+  margin-bottom: 32px;
+  opacity: 0; animation: fadeUp .6s .25s ease forwards;
+}
+.hero-slogan {
+  font-family: 'Oswald', sans-serif; font-weight: 700;
+  font-size: clamp(48px, 7.5vw, 104px);
+  line-height: 0.88; text-transform: uppercase;
+  letter-spacing: 0.02em; color: var(--white);
+  margin-bottom: 24px;
+  opacity: 0; animation: fadeUp .6s .4s ease forwards;
+}
+.hero-slogan em { font-style: normal; color: var(--orange); }
+.hero-slogan .light { font-weight: 200; color: rgba(245,241,220,0.38); }
+.hero-desc {
+  font-size: clamp(14px, 1.2vw, 16px); font-weight: 300;
+  color: rgba(245,241,220,0.58); max-width: 500px; line-height: 1.8;
+  margin-bottom: 44px;
+  opacity: 0; animation: fadeUp .6s .55s ease forwards;
+}
+.hero-desc strong { color: var(--cream); font-weight: 500; }
+.hero-actions { opacity: 0; animation: fadeUp .6s .7s ease forwards; }
+.btn-primary {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem; font-weight: 700;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--ink); background: var(--orange);
+  padding: 18px 36px; text-decoration: none;
+  display: inline-flex; align-items: center; gap: 12px;
+  transition: background .2s, transform .2s;
+}
+.btn-primary:hover { background: var(--cream); transform: translateY(-2px); }
+.btn-primary::after { content: '→'; font-size: 16px; letter-spacing: 0; }
+
+/* Ticker */
+.hero-ticker {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
+  background: var(--orange); padding: 10px 0; overflow: hidden;
+}
+.ticker-track {
+  display: flex; white-space: nowrap;
+  animation: ticker 30s linear infinite;
+  width: max-content;
+}
+.ticker-item {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: var(--ink); padding: 0 28px; flex-shrink: 0;
+}
+.ticker-dot { color: rgba(26,21,14,0.3); margin-left: 4px; }
+@keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+/* ══ SHARED ══ */
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+.sec-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem; font-weight: 700;
+  letter-spacing: 0.45em; text-transform: uppercase;
+  color: var(--orange);
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 56px;
+}
+.sec-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+.sec-label.light::after { background: rgba(245,241,220,0.1); }
+
+/* ══ BLOQUE 2: NUESTRA HISTORIA ══ */
+#origen { padding: 120px 0; background: var(--white); }
+.origen-grid { display: grid; grid-template-columns: 5fr 4fr; gap: 80px; align-items: start; }
+.origen-headline {
+  font-family: 'Oswald', sans-serif; font-weight: 700;
+  font-size: clamp(34px, 4.2vw, 58px);
+  line-height: 0.92; text-transform: uppercase;
+  color: var(--ink); margin-bottom: 32px;
+}
+.origen-headline span { color: var(--orange); }
+.origen-text { font-size: 0.95rem; font-weight: 300; color: var(--carbon); line-height: 1.85; margin-bottom: 20px; }
+.origen-text strong { font-weight: 600; color: var(--ink); }
+.origen-text em { font-style: italic; color: var(--faded); }
+.mv-stack { display: flex; flex-direction: column; }
+.mv-item { padding: 28px 0; border-top: 1px solid var(--rule); }
+.mv-item:last-child { border-bottom: 1px solid var(--rule); }
+.mv-tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.85rem; font-weight: 700;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--blue); display: block; margin-bottom: 10px;
+}
+.mv-body {
+  font-family: 'Oswald', sans-serif; font-weight: 400;
+  font-size: clamp(16px, 1.7vw, 21px); line-height: 1.45; color: var(--ink);
+}
+.mv-body strong { font-weight: 600; }
+
+/* ══ BLOQUE 3: POR QUÉ MATCH MEDIA ══ */
+#porque { padding: 120px 0; background: var(--ink); position: relative; overflow: hidden; }
+#porque::before {
+  content: 'MATCH';
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  font-family: 'Oswald', sans-serif; font-weight: 900;
+  font-size: clamp(140px, 22vw, 320px);
+  color: rgba(245,241,220,0.022);
+  letter-spacing: -0.04em; white-space: nowrap;
+  pointer-events: none; line-height: 1; user-select: none;
+}
+.porque-intro { max-width: 680px; margin-bottom: 64px; }
+.porque-headline {
+  font-family: 'Oswald', sans-serif; font-weight: 700;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 0.92; text-transform: uppercase;
+  color: var(--cream); margin-bottom: 20px;
+}
+.porque-headline em { font-style: normal; color: var(--orange); }
+/* párrafo intro — sin subtítulo duplicado */
+.porque-sub {
+  font-size: 0.95rem; font-weight: 300;
+  color: rgba(245,241,220,0.55); line-height: 1.8;
+}
+.porque-sub strong { color: var(--cream); font-weight: 500; }
+
+.match-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 3px; }
+.match-card {
+  padding: 48px 36px 56px; position: relative; overflow: hidden;
+  cursor: default; transition: transform .35s;
+}
+.match-card:hover { transform: translateY(-6px); }
+.match-card:nth-child(1) { background: rgba(0,70,255,0.14); border-top: 3px solid var(--blue); }
+.match-card:nth-child(2) { background: rgba(255,128,64,0.10); border-top: 3px solid var(--orange); }
+.match-card:nth-child(3) { background: rgba(245,241,220,0.04); border-top: 3px solid rgba(245,241,220,0.18); }
+.match-bg-num {
+  font-family: 'Oswald', sans-serif; font-weight: 900;
+  font-size: 28px; line-height: 1;
+  color: rgba(245,241,220,0.12);
+  position: absolute; bottom: 16px; right: 20px;
+  user-select: none;
+}
+.match-tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 0.45em; text-transform: uppercase;
+  display: block; margin-bottom: 16px;
+}
+.match-card:nth-child(1) .match-tag { color: var(--blue); }
+.match-card:nth-child(2) .match-tag { color: var(--orange); }
+.match-card:nth-child(3) .match-tag { color: rgba(245,241,220,0.3); }
+.match-title {
+  font-family: 'Oswald', sans-serif; font-weight: 700;
+  font-size: clamp(30px, 3.2vw, 46px);
+  line-height: 0.92; text-transform: uppercase; color: var(--cream); margin-bottom: 4px;
+}
+.match-subtitle {
+  font-family: 'Oswald', sans-serif; font-weight: 300;
+  font-size: clamp(14px, 1.5vw, 19px);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: rgba(245,241,220,0.28); margin-bottom: 20px;
+}
+.match-rule { width: 24px; height: 2px; margin-bottom: 16px; }
+.match-card:nth-child(1) .match-rule { background: var(--blue); }
+.match-card:nth-child(2) .match-rule { background: var(--orange); }
+.match-card:nth-child(3) .match-rule { background: rgba(245,241,220,0.2); }
+.match-body { font-size: 0.85rem; color: rgba(245,241,220,0.5); line-height: 1.75; }
+.match-body strong { color: var(--cream); font-weight: 600; }
+
+/* ══ BLOQUE 4: GALERÍA — 4 fotos asimétricas ══ */
+#galeria { padding: 120px 0; background: var(--white); }
+.gal-intro {
+  display: flex; align-items: flex-end;
+  justify-content: space-between; gap: 40px; margin-bottom: 48px;
+}
+.gal-headline {
+  font-family: 'Oswald', sans-serif; font-weight: 700;
+  font-size: clamp(32px, 4.5vw, 60px);
+  line-height: 0.9; text-transform: uppercase; color: var(--ink);
+}
+.gal-headline span { color: var(--orange); display: block; }
+.gal-tagline {
+  font-family: 'Barlow', sans-serif;
+  font-size: 0.9rem; font-weight: 300; font-style: italic;
+  color: var(--faded); line-height: 1.7;
+  max-width: 280px; flex-shrink: 0;
+}
+.social-links {
+    background: var(--white);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 15px var(--rule);
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    border: 2px solid var(--rule);
+}
+
+.social-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.social-link i {
+    font-size: 50px;
+    margin-bottom: 10px;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.social-link span {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--ink);
+    transition: color 0.3s ease;
+}
+
+/* Instagram styling */
+.instagram-link i {
+    color: var(--orange);
+}
+
+.instagram-link:hover i {
+    transform: scale(1.2) rotate(5deg);
+    color: var(--blue);
+}
+
+.instagram-link:hover span {
+    color: var(--orange);
+}
+
+/* Portfolio styling */
+.portfolio-link i {
+    color: var(--blue);
+}
+
+.portfolio-link:hover i {
+    transform: scale(1.2) rotate(-5deg);
+    color: var(--orange);
+}
+
+.portfolio-link:hover span {
+    color: var(--blue);
+}
+
+@media (max-width: 600px) {
+    .social-links {
+        flex-direction: column;
+        gap: 20px;
+        padding: 30px;
+    }
+
+    .social-link i {
+        font-size: 40px;
+    }
+
+    .social-link span {
+        font-size: 14px;
+    }
+}
+
+/*
+  Layout asimétrico 4 fotos:
+  Fila 1: Touchdown (2fr, vertical) | Yoga (1.2fr, vertical)
+  Fila 2: Autenticos (1.2fr, vertical) | Corredor (2fr, horizontal)
+*/
+.gal-grid {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr;
+  grid-template-rows: auto auto;
+  gap: 4px;
+}
+.gal-cell { position: relative; overflow: hidden; }
+.gal-cell img {
+  width: 100%; height: 100%;
+  object-fit: cover; display: block;
+  transition: transform .7s ease;
+}
+.gal-cell:hover img { transform: scale(1.04); }
+
+.gc-a { grid-column:1; grid-row:1; min-height: 520px; } 
+.gc-b { grid-column:2; grid-row:1; min-height: 520px; } 
+.gc-c { grid-column:1; grid-row:2; min-height: 400px; } 
+.gc-d { grid-column:2; grid-row:2; min-height: 400px; }
+.gc-e { grid-column:1; grid-row:3; min-height: 400px; }
+.gc-f { grid-column:2; grid-row:3; min-height: 400px; }
+.gc-g { grid-column:1; grid-row:4; min-height: 400px; }
+.gc-h { grid-column:2; grid-row:4; min-height: 400px; } 
+
+.gc-a img { object-position: center top; }
+.gc-b img { object-position: center top; }
+.gc-c img { object-position: center 25%; }
+.gc-d img { object-position: center top; }
+.gc-e img { object-position: center top; }
+.gc-f img { object-position: center top; }
+.gc-g img { object-position: center 25%; }
+.gc-h img { object-position: center top; }
+
+/* Hover captions — slide up */
+.gal-cap {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(26,21,14,0.90));
+  padding: 60px 22px 20px;
+  transform: translateY(100%);
+  transition: transform .4s ease; z-index: 2;
+}
+.gal-cell:hover .gal-cap { transform: translateY(0); }
+
+/* Línea 1: deporte + ubicación — naranja, mayúsculas */
+.gal-cap-tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.4em; text-transform: uppercase;
+  color: var(--orange); display: block; margin-bottom: 5px;
+}
+/* Línea 2: descripción del momento — blanco */
+.gal-cap-title {
+  font-family: 'Oswald', sans-serif; font-weight: 600;
+  font-size: clamp(13px, 1.4vw, 16px);
+  text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--cream); line-height: 1.2; margin-bottom: 6px;
+}
+/* Línea 3: crédito © — gris, monospace */
+.gal-cap-credit {
+  font-family: 'Courier Prime', monospace; font-style: italic;
+  font-size: 0.72rem; color: rgba(245,241,220,0.38);
+}
+
+/* Stamp de agencia — neutral, sin nombre de fotógrafo */
+.gal-stamp {
+  position: absolute; top: 24px; left: -12px; z-index: 3;
+  background: var(--orange); color: var(--ink);
+  font-family: 'Oswald', sans-serif; font-weight: 700;
+  font-size: 0.62rem; letter-spacing: 0.4em; text-transform: uppercase;
+  padding: 8px 40px; transform: rotate(-1.5deg);
+  box-shadow: 3px 3px 0 rgba(0,0,0,0.2); pointer-events: none;
+}
+
+/* ══ BLOQUE 5: TRABAJEMOS JUNTOS ══ */
+#contacto { padding: 120px 0; background: var(--cream); }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.c-headline {
+  font-family: 'Oswald', sans-serif; font-weight: 700;
+  font-size: clamp(40px, 5.5vw, 72px);
+  line-height: 0.88; text-transform: uppercase;
+  color: var(--ink); margin-bottom: 10px; letter-spacing: 0.01em;
+}
+.c-headline em { font-style: normal; color: var(--orange); display: block; }
+.c-headline-sub {
+  font-family: 'Courier Prime', monospace; font-style: italic;
+  font-size: 0.9rem; color: var(--faded);
+  letter-spacing: 0.05em; margin-bottom: 28px; display: block;
+}
+.contact-left p { font-size: 0.95rem; color: var(--carbon); line-height: 1.75; margin-bottom: 20px; }
+
+/* Bloque email imponente */
+.c-email-block {
+  margin-top: 16px;
+  padding: 20px 24px;
+  background: var(--ink);
+  display: flex; flex-direction: column; gap: 6px;
+}
+.c-email-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.75rem; font-weight: 700;
+  letter-spacing: 0.5em; text-transform: uppercase;
+  color: rgba(245,241,220,0.3);
+}
+.c-email {
+  font-family: 'Oswald', sans-serif; font-weight: 600;
+  font-size: clamp(14px, 1.6vw, 20px);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--orange); text-decoration: none;
+  transition: color .2s;
+}
+.c-email:hover { color: var(--cream); }
+
+/* FAQ */
+.faq-stack { display: flex; flex-direction: column; }
+.faq-item { border-top: 1px solid rgba(26,21,14,0.1); overflow: hidden; }
+.faq-item:last-child { border-bottom: 1px solid rgba(26,21,14,0.1); }
+.faq-q {
+  width: 100%; background: none; border: none; cursor: pointer;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 16px; padding: 20px 0; text-align: left;
+}
+.faq-q-text {
+  font-family: 'Oswald', sans-serif; font-weight: 500;
+  font-size: clamp(14px, 1.4vw, 17px);
+  text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--ink); line-height: 1.2;
+}
+.faq-icon {
+  font-family: 'Courier Prime', monospace; font-size: 1.1rem;
+  color: var(--orange); flex-shrink: 0;
+  transition: transform .3s; line-height: 1; margin-top: 2px;
+}
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+.faq-a {
+  max-height: 0; overflow: hidden;
+  transition: max-height .4s ease, padding .3s ease;
+  font-size: 0.9rem; color: var(--carbon); line-height: 1.75; padding: 0;
+}
+.faq-item.open .faq-a { max-height: 220px; padding: 0 0 20px; }
+
+/* ══ FOOTER ══ */
+footer {
+  background: var(--ink);
+  border-top: 3px solid var(--orange);
+  padding: 28px 40px;
+  display: flex; align-items: center;
+  justify-content: space-between; flex-wrap: wrap; gap: 14px;
+}
+/* "MATCH MEDIA" sin AGENCY */
+.footer-brand {
+  font-family: 'Oswald', sans-serif; font-weight: 700;
+  font-size: 1rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--cream);
+}
+.footer-brand span { color: var(--orange); }
+/* Slogan con mucho más peso */
+.footer-slogan {
+  font-family: 'Oswald', sans-serif; font-weight: 600;
+  font-size: clamp(16px, 1.8vw, 22px);
+  font-style: italic; letter-spacing: 0.08em;
+  color: rgba(245,241,220,0.65);
+}
+.footer-info {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.7rem; font-weight: 600;
+  letter-spacing: 0.35em; text-transform: uppercase;
+  color: rgba(245,241,220,0.18);
+}
+
+/* ══ ANIMACIONES ══ */
+@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+/* ══ RESPONSIVE ══ */
+@media (max-width: 960px) {
+  nav { padding: 0 20px; }
+  .nav-links, .nav-cta { display: none; }
+  .wrap { padding: 0 24px; }
+  .hero-inner { padding: 60px 24px 100px; }
+  .origen-grid { grid-template-columns: 1fr; gap: 48px; }
+  .match-grid { grid-template-columns: 1fr; gap: 3px; }
+  .gal-grid { grid-template-columns: 1fr 1fr; }
+  .gc-a, .gc-b, .gc-c, .gc-d { min-height: 300px; }
+  .contact-grid { grid-template-columns: 1fr; gap: 52px; }
+  footer { padding: 24px 20px; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .gal-intro { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 580px) {
+  .gal-grid { grid-template-columns: 1fr; }
+  .gc-a, .gc-b, .gc-c, .gc-d { grid-column: 1; min-height: 280px; }
+  .hero-slogan { font-size: clamp(40px, 12vw, 64px); }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo-container">
+    <!-- Reemplazar con <svg>...</svg> cuando el vector esté listo -->
+    <div class="logo-placeholder">M<em>·</em>M &nbsp;MATCH MEDIA</div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#hero">Inicio</a></li>
+    <li><a href="#origen">Nuestra Historia</a></li>
+    <li><a href="#porque">¿Por qué MM?</a></li>
+    <li><a href="#galeria">Galería</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#contacto" class="nav-cta">Cotizar</a>
+</nav>
+
+<!-- BLOQUE 1: HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <img src="./assets/DSC_9913.jpg" alt="Celebración touchdown — Borregos TEC MTY">
+  </div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Agencia Internacional · Fotografía Deportiva</div>
+    <div class="hero-logo-wrap">
+      <div class="logo-placeholder" style="font-size:1.2rem;letter-spacing:0.22em;border-color:rgba(255,128,64,0.3);">
+        M<em style="color:var(--orange);font-style:normal;">·</em>M &nbsp;MATCH MEDIA
+      </div>
+    </div>
+    <h1 class="hero-slogan">
+      <em>Framing</em><br>
+      <span class="light">the</span> match.
+    </h1>
+    <!-- PUNTO 1: eliminada la oración final del párrafo -->
+    <p class="hero-desc">
+      Fotografiamos el deporte desde adentro. <strong>El músculo que tiembla antes del arranque, el rostro que se quiebra antes de que el marcador lo confirme.</strong>
+    </p>
+    <div class="hero-actions">
+      <a href="#galeria" class="btn-primary">Ver nuestro trabajo</a>
+    </div>
+  </div>
+  <div class="hero-ticker">
+    <div class="ticker-track">
+      <span class="ticker-item">Running &amp; Trail <span class="ticker-dot">·</span></span>
+      <span class="ticker-item">Basketball <span class="ticker-dot">·</span></span>
+      <span class="ticker-item">Yoga &amp; Wellness <span class="ticker-dot">·</span></span>
+      <span class="ticker-item">Fotografía Editorial <span class="ticker-dot">·</span></span>
+      <span class="ticker-item">Fútbol Americano <span class="ticker-dot">·</span></span>
+      <span class="ticker-item">Eventos Multidisciplinarios <span class="ticker-dot">·</span></span>
+      <span class="ticker-item">Soccer &amp; Pro Sports <span class="ticker-dot">·</span></span>
+      <span class="ticker-item">Running &amp; Trail <span class="ticker-dot">·</span></span>
+      <span class="ticker-item">Basketball <span class="ticker-dot">·</span></span>
+      <span class="ticker-item">Yoga &amp; Wellness <span class="ticker-dot">·</span></span>
+      <span class="ticker-item">Fotografía Editorial <span class="ticker-dot">·</span></span>
+      <span class="ticker-item">Fútbol Americano <span class="ticker-dot">·</span></span>
+      <span class="ticker-item">Eventos Multidisciplinarios <span class="ticker-dot">·</span></span>
+      <span class="ticker-item">Soccer &amp; Pro Sports <span class="ticker-dot">·</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- BLOQUE 2: NUESTRA HISTORIA -->
+<section id="origen">
+  <div class="wrap">
+    <p class="sec-label">Nuestra Historia</p>
+    <div class="origen-grid">
+      <div>
+        <h2 class="origen-headline">
+          Nació de un momento de <span>honestidad</span> profesional.
+        </h2>
+        <p class="origen-text">
+          Match Media no nace de una estrategia corporativa. Nace del instante en que fotógrafos con trayectoria probada decidieron que <strong>el camino prestado ya no era suficiente.</strong>
+        </p>
+        <p class="origen-text">
+          Lo que nos mueve no es la imagen técnicamente perfecta. Es la <em>esencia del esfuerzo</em>: <strong>narramos el deporte desde adentro</strong> — desde el estadio universitario que ruge hasta la pista donde alguien cruza su primera meta con los brazos en alto.
+        </p>
+        <p class="origen-text">
+          Somos una agencia internacional de fotografía y medios deportivos. Cubrimos todo tipo de disciplinas porque <strong>el deporte no entiende de jerarquías.</strong>
+        </p>
+      </div>
+      <div class="mv-stack">
+        <div class="mv-item">
+          <span class="mv-tag">Misión</span>
+          <p class="mv-body">Capturar la <strong>narrativa auténtica del esfuerzo humano</strong> en el deporte, construyendo un vínculo personal con cada atleta para revelar la historia que existe más allá del marcador.</p>
+        </div>
+        <div class="mv-item">
+          <span class="mv-tag">Visión</span>
+          <p class="mv-body">Ser el <strong>referente global</strong> en cobertura emocional y técnica de eventos deportivos, reconocidos por convertir cada imagen en un documento histórico de la condición humana en competencia.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOQUE 3: POR QUÉ MATCH MEDIA -->
+<section id="porque">
+  <div class="wrap">
+    <p class="sec-label light">¿Por qué Match Media?</p>
+    <div class="porque-intro">
+      <h2 class="porque-headline">
+        Nuestro nombre<br>no es <em>casualidad.</em>
+      </h2>
+      <!-- PUNTO 2: sin subtítulo duplicado, párrafo corregido -->
+      <p class="porque-sub">
+        <strong>Match</strong> condensa en una sola palabra lo que somos: la promesa con el cliente, la cobertura del partido — del evento deportivo — y la obsesión por ese <strong>instante único que no se repite.</strong>
+      </p>
+    </div>
+    <div class="match-grid">
+      <div class="match-card">
+        <span class="match-tag">El Vínculo</span>
+        <h3 class="match-title">Match</h3>
+        <p class="match-subtitle">con el cliente</p>
+        <div class="match-rule"></div>
+        <p class="match-body">La promesa de un <strong>match perfecto con el cliente</strong>: entender su historia antes de levantar el lente. El fotógrafo como puente entre el atleta y su audiencia.</p>
+        <span class="match-bg-num">I</span>
+      </div>
+      <div class="match-card">
+        <span class="match-tag">La Cobertura</span>
+        <h3 class="match-title">Match</h3>
+        <p class="match-subtitle">el partido</p>
+        <div class="match-rule"></div>
+        <p class="match-body">La cobertura integral de <strong>matches, partidos y eventos</strong>. Estamos en el campo, el gimnasio, la pista, el estadio. La acción es nuestro hábitat.</p>
+        <span class="match-bg-num">II</span>
+      </div>
+      <div class="match-card">
+        <span class="match-tag">El Instante</span>
+        <h3 class="match-title">Match</h3>
+        <p class="match-subtitle">point</p>
+        <div class="match-rule"></div>
+        <p class="match-body">La tensión del <strong>match point</strong>: el instante donde la técnica y la emoción colisionan. El disparo que no se puede repetir.</p>
+        <span class="match-bg-num">III</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLOQUE 4: GALERÍA — 4 fotos, layout asimétrico -->
+<section id="galeria">
+  <div class="wrap">
+    <p class="sec-label">Galería Editorial</p>
+    <div class="gal-intro">
+      <h2 class="gal-headline">
+        El campo<br>es nuestro<br><span>estudio.</span>
+      </h2>
+      <!-- PUNTO 3: nueva narrativa de marca, sin nombres de fotógrafo -->
+      <p class="gal-tagline">
+        Nuestra identidad es el boleto de entrada a la acción, capturado de por vida a través del lente editorial de nuestros fotógrafos.
+      </p>
+    </div>
+
+    <div class="gal-grid">
+
+      <!-- A: Touchdown — Israel Cueto, vertical grande -->
+      <div class="gal-cell gc-a">
+        <div class="gal-stamp">Match Media</div>
+        <img src="./assets/DSC_9693-2.jpg"
+             alt="Carrera de anotación — Borregos TEC MTY">
+        <div class="gal-cap">
+          <span class="gal-cap-tag">Fútbol Americano — Estadio Borregos, MTY</span>
+          <div class="gal-cap-title">Carrera de anotación</div>
+          <div class="gal-cap-credit">© Israel Cueto — Match Media</div>
+        </div>
+      </div>
+
+      <!-- B: Yoga — Israel Cueto, vertical -->
+      <div class="gal-cell gc-b">
+        <img src="./assets/TR1_2089.jpg"
+             alt="Presentación aparato de gimnasio — disciplina y esfuerzo">
+        <div class="gal-cap">
+          <span class="gal-cap-tag">Sesión de estudio &amp; Gimnasio</span>
+          <div class="gal-cap-title">Disciplina y esfuerzo</div>
+          <div class="gal-cap-credit">© Israel Cueto — Match Media</div>
+        </div>
+      </div>
+
+
+      <div class="gal-cell gc-c">
+        <img src="./assets/DSC_4057.jpg"
+             alt="Carreras oficiales — Automovilismo">
+        <div class="gal-cap">
+          <span class="gal-cap-tag">Carreras  </span>
+          <div class="gal-cap-title">Automovilismo</div>
+          <div class="gal-cap-credit">© Israel Cueto — Match Media</div>
+        </div>
+      </div>
+
+      <!-- C: Corredor — David Hatch, horizontal -->
+      <div class="gal-cell gc-d">
+        <img src="./assets/IMG_4190.jpg"
+             alt="Corredora con lentes oscuros celebrando con el brazo arriba">
+        <div class="gal-cap">
+          <span class="gal-cap-tag">Fútbol Americano — Pro Sports, MTY</span>
+          <div class="gal-cap-title">Cruce de meta</div>
+          <div class="gal-cap-credit">© David Hatch — Match Media</div>
+        </div>
+      </div>
+
+
+      <div class="gal-cell gc-e">
+        <img src="./assets/_MG_2307.jpg"
+             alt="Corredora Lululemon">
+        <div class="gal-cap">
+          <span class="gal-cap-tag">Carrera Lululemon — Atletismo</span>
+          <div class="gal-cap-title">Carrera 10k</div>
+          <div class="gal-cap-credit">© David Hatch — Match Media</div>
+        </div>
+      </div>
+
+
+      <!-- D: Auténticos — David Hatch, vertical -->
+      <div class="gal-cell gc-f">
+        <img src="./assets/_MG_4968.jpg"
+             alt="Corredora Ibero">
+        <div class="gal-cap">
+          <span class="gal-cap-tag">Carrera Ibero — Atletismo</span>
+          <div class="gal-cap-title">Carrera 5k</div>
+          <div class="gal-cap-credit">© David Hatch — Match Media</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<!-- Bloque 4.1 Nuestros fotógrafos-->
+<section id="galeria">
+    <div class="wrap">
+      <p class="sec-label">Nuestros Fotógrafos</p>
+      <div class="gal-intro">
+        <h2 class="gal-headline">
+          David<span>Hatch</span>
+        </h2>
+        <div class="gal-grid">
+        <div class="social-links">
+            <!-- Instagram Link -->
+            <a href="https://www.instagram.com/photronomy_/" target="_blank" class="social-link instagram-link">
+                <i class="fab fa-instagram"></i>
+                <span>Instagram</span>
+            </a>
+            <!-- Portfolio Link -->
+            <br>
+            <a href="https://www.canva.com/design/DAHJe9btsV8/sJwtUJyo18NZ5jbxDjYZog/view?utm_content=DAHJe9btsV8&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h8987ad15f7" target="_blank" class="social-link portfolio-link">
+                <i class="fas fa-briefcase"></i>
+                <span>Portfolio</span>
+            </a>
+        </div>
+        </div>
+    </div>
+    
+    <div class="gal-intro">
+        <h2 class="gal-headline">
+            Israel<span>Cueto</span>
+          </h2>
+          <div class="gal-grid">
+            <div class="social-links">
+                <!-- Instagram Link -->
+                <a href="https://www.instagram.com/israel_cueto03/" target="_blank" class="social-link instagram-link">
+                    <i class="fab fa-instagram"></i>
+                    <span>Instagram</span>
+                </a>
+                <!-- Portfolio Link -->
+                <br>
+                <a href="https://www.canva.com/design/DAHMAP9eooQ/PPvnYXQJapMd9SrHuXWGJg/view?utm_content=DAHMAP9eooQ&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hf0ca62bb7e" target="_blank" class="social-link portfolio-link">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Portfolio</span>
+                </a>
+            </div>
+      </div>
+    
+
+</section>
+
+<!-- BLOQUE 5: TRABAJEMOS JUNTOS -->
+<section id="contacto">
+  <div class="wrap">
+    <p class="sec-label">Trabajemos Juntos</p>
+    <div class="contact-grid">
+
+      <div class="contact-left">
+        <h2 class="c-headline">
+          Tu<br><em>Match Point.</em>
+        </h2>
+        <span class="c-headline-sub">— capturemos el momento irrepetible.</span>
+        <p>Cuéntanos tu historia antes de que levantemos el lente. Trabajamos con equipos, marcas, atletas y organizadores de eventos deportivos a todos los niveles.</p>
+        <!-- PUNTO 4: email imponente y limpio -->
+        <div class="c-email-block">
+          <span class="c-email-label">Contáctanos</span>
+          <a href="mailto:contacto@matchmedia.agency" class="c-email">contacto@matchmedia.agency</a>
+        </div>
+      </div>
+
+      <!-- FAQ Accordion -->
+      <div class="faq-stack">
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">¿Cómo puedo cotizar una sesión individual o de equipo?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            Escríbenos directamente a nuestro correo especificando la disciplina, fecha y lugar del evento para enviarte una propuesta a la medida de tus necesidades.
+          </div>
+        </div>
+
+        <!-- PUNTO 4: respuesta de eventos modificada -->
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">¿Qué tipo de eventos multidisciplinarios cubren?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            Nuestra cobertura abarca desde carreras de running, sesiones de yoga, gimnasia, hasta partidos de basketball, football, baseball, y coberturas editoriales completas.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">¿Es posible comprar material fotográfico de su portafolio?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            Sí. Muy pronto estará disponible nuestro catálogo con licencias para uso comercial y editorial. Si te interesa alguna pieza actual, contáctanos por correo.
+          </div>
+        </div>
+
+        <!-- PUNTO 4: última pregunta modificada -->
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">
+            <span class="faq-q-text">¿Cómo se puede trabajar con Match Media?</span>
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-a">
+            Ofrecemos dos esquemas de colaboración: como cliente, puedes contratarnos para coberturas puntuales, campañas editoriales o proyectos a largo plazo. Como talento, si eres fotógrafo con portafolio multidisciplinario y buscas sumarte a nuestra red de asociados, escríbenos con tu trabajo a contacto@matchmedia.agency.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER — PUNTO 5 -->
+<footer>
+  <!-- "MATCH MEDIA" sin AGENCY -->
+  <div class="footer-brand">Match <span>Media</span></div>
+  <!-- Slogan con mucho más presencia -->
+  <div class="footer-slogan">Framing the match.</div>
+  <div class="footer-info">© 2025 · contacto@matchmedia.agency</div>
+</footer>
+
+<script>
+function toggleFaq(btn) {
+  const item = btn.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+</script>
+
+</body>
+</html>
